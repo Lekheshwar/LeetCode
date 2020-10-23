@@ -48,50 +48,49 @@ public:
 class Solution {
 public:
 
-    int findLeft(vector<int>& nums,int target, int s, int e){
-        if(s > e)return -1;
-        if(s == e) return nums[s] == target ? s : -1;
-        int mid = s + (e - s) / 2;
+    int findLeft(vector<int>& nums,int target, int start, int end){
+        if(start > end)return -1;
+        if(start == end) return nums[start] == target ? start : -1;
+
+        int mid = start + (end - start) / 2;
         if(nums[mid] == target){
-            int k = findLeft(nums, target, s, mid - 1);
+            int k = findLeft(nums, target, start, mid - 1);
             return k == -1 ? mid : k;
         }
         else
-            return findLeft(nums, target, mid+1, e);
+            return findLeft(nums, target, mid+1, end);
     }
 
-    int findRight(vector<int>& nums,int target, int s, int e){
-        if(s > e)return -1;
-        if(s == e) return nums[s] == target ? s : -1;
-        int mid = s + (e - s) / 2;
+    int findRight(vector<int>& nums,int target, int start, int end){
+        if(start > end)return -1;
+        if(start == end) return nums[start] == target ? start : -1;
+
+        int mid = start + (end - start) / 2;
         if(nums[mid] == target){
-            int k = findRight(nums, target, mid + 1, e);
+            int k = findRight(nums, target, mid + 1, end);
             return k == -1 ? mid : k;
         }
         else
-            return findRight(nums, target, s, mid - 1);
+            return findRight(nums, target, start, mid - 1);
     }
 
     vector<int> searchRange(vector<int>& nums, int target) {
-        int n = nums.size();
-        if(n == 0)return {-1, -1};
-        int l = 0;
-        int r = n - 1;
-        int mid;
-        while(l <= r){
-            mid = l + (r - l) / 2;
+        int left = 0, right = nums.size() - 1;
+
+        while(left <= right){
+           int mid = left + (right - left) / 2;
             if(nums[mid] == target){
-                int start = findLeft(nums, target, l, mid - 1);
-                int end = findRight(nums, target, mid + 1, r);
+                int start = findLeft(nums, target, left, mid - 1);
+                int end = findRight(nums, target, mid + 1, right);
                 start = start == -1 ? mid : start;
                 end = end == -1 ? mid : end;
                 return {start, end};
             }
             else if(nums[mid] > target){
-                r = mid - 1;
+                right = mid - 1;
             }
             else{
-                l = mid + 1;
+                left = mid + 1;
             }
         }
         return {-1, -1};
